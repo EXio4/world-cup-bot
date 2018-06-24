@@ -1,0 +1,17 @@
+{
+  "name": "wcbot",
+  "version": "1.0.0",
+  "description": "World Cup Matches Updates on Telegrm",
+  "main": "dist/index.js",
+  "repository": "https://github.com/EXio4/worldcup",
+  "author": "Esteban I. Ruiz Moreno",
+  "license": "MIT",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "node-telegram-bot-api": "^0.30.0"
+  },
+  "scripts": {
+    "build": "babel src -d dist"
+  }
+}
