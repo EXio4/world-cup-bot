@@ -32,9 +32,12 @@ async function readMsgs() {
 }
 
 async function start() {
-    
-    await readMsgs();
-    
+
+    try {
+        await readMsgs();
+    } catch (err) {
+        // it might fail, we don't care
+    }
     await matches.update();
     setInterval(normalize(async function() {
         await matches.update();
@@ -65,18 +68,23 @@ async function start() {
         let s = "";
         for (let match of matches.list_matches()) {
             if (match.status == 'future') {
-                s += `[${match.fifa_id}] ${flag(match.home_team.code)} ${match.home_team.country} - ${match.away_team.country} ${flag(match.away_team.code)}\n`;
+                s += `\`${match.fifa_id}\` ${flag(match.home_team.code)} ${match.home_team.country} - ${match.away_team.country} ${flag(match.away_team.code)} __${match.datetime}__\n`;
             } else {
-                s += `[${match.fifa_id}] ${flag(match.home_team.code)} ${match.home_team.country} ${match.home_team.goals} - ${match.away_team.goals} ${match.away_team.country} ${flag(match.away_team.code)}\n`;
+                s += `\`${match.fifa_id}\` ${flag(match.home_team.code)} ${match.home_team.country} ${match.home_team.goals} - ${match.away_team.goals} ${match.away_team.country} ${flag(match.away_team.code)}\n`;
             }
         }
         if (s === "") {
             s = "Loading match info, try again later...";
         }
-        await bot.sendMessage(msg.chat.id, s);
+        await bot.sendMessage(msg.chat.id, s, { parse_mode : 'Markdown' });
 
     }));
+    bot.on('message', (msg) => {
+    const chatId = msg.chat.id;
 
+    // send a message to the chat acknowledging receipt of their message
+    bot.sendMessage(chatId, 'Received your message');
+    });
 
     state.addTracker(async function () {
         for (let [fifa_id,msg] of msgs) {
