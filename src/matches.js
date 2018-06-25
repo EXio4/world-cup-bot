@@ -38,6 +38,28 @@ function events(match) {
     return evs;
 }
 
+function goals(match) {
+    let scores = [0,0];
+    for (let ev of events(match)) {
+        if (ev.type == 'goal' || ev.type == 'goal-penalty') {
+            if (ev.team.code == match.home_team.code) {
+                scores[0]++;
+            } else {
+                scores[1]++;
+            }
+        } else if (ev.type == 'goal-own') {
+            // the api is a mess, check uruguay's watch
+            if (ev.team.code == match.home_team.code) {
+                //scores[1]++;
+            } else {
+                //scores[0]++;
+            }
+        }
+    }
+    match.home_team.goals = scores[0];
+    match.away_team.goals = scores[1];
+}
+
 function details(match) {
     let header = `\n➖➖➖➖➖➖\n`;
     let scores = [0,0];
@@ -45,15 +67,29 @@ function details(match) {
     for (let ev of events(match)) {
         let concept = `\`${ev.time}\``
         const country = `**${ev.team.country}** ${flag(ev.team.code)}`
-        if (ev.type == 'goal') {
+        if (ev.type == 'goal' | ev.type == 'goal-penalty') {
+            let penalty = ev.type == 'goal-penalty'
             if (ev.team.code == match.home_team.code) {
                 scores[0]++;
             } else {
                 scores[1]++;
             }
-            concept += ` ⚽️ GOAL! ${country} - ${ev.player} (${flags[0]} ${scores[0]} - ${scores[1]} ${flags[1]})`;
+            concept += ` ⚽️ ${penalty ? "PENALTY AND " : ""}GOAL! ${flag(ev.team.code)}! ${country} - ${ev.player} (${flags[0]} ${scores[0]} - ${scores[1]} ${flags[1]})`;
+        } else if (ev.type == 'goal-own') {
+            let opposite = undefined;
+            if (ev.team.code == match.home_team.code) {
+                opposite = match.away_team;
+                //scores[0]++;
+            } else {
+                opposite = match.home_team;
+                //scores[1]++;
+            }
+            
+            concept += ` ⚽️ GOAL ${flag(opposite.code)}! ${country} - ${ev.player} (own goal!) (${flags[0]} ${scores[0]} - ${scores[1]} ${flags[1]})`;
         } else if (ev.type == 'yellow-card') {
             concept += `⚠️ Yellow Card! ${ev.player} - ${country}`
+        } else if (ev.type == 'yellow-card-second') {
+            concept += `⚠️‼️ Second Yellow Card, and that's RED! ${ev.player} - ${country}`
         } else if (ev.type == 'red-card') {
             concept += `‼️ RED CARD! ${ev.player} - ${country}`
         } else if (ev.type == 'substitution-in') {
@@ -101,11 +137,15 @@ export class Matches {
     
     convert(match) {
         if (!match || !match.status) { return "Invalid match"; }
-        if (match.status === "completed" || match.status == "in progress") {
+        if (match.status == "pending_correction") {
+            goals(match);
+        }
+        if (match.status === "completed" || match.status == "in progress" || match.status == "pending_correction") {
             return `${flag(match.home_team.code)} **${match.home_team.country}** ${match.home_team.goals} - ${match.away_team.goals} **${match.away_team.country}** ${flag(match.away_team.code)} ${match.time}\n${details(match)}`;
         } else if (match.status === "future") {
             return `To be played on ${match.datetime}\n${flag(match.home_team.code)} **${match.home_team.country}** - **${match.away_team.country}** ${flag(match.away_team.code)}`;
         }
+        console.error(match);
         return "???"
     }
     

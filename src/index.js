@@ -38,13 +38,15 @@ async function start() {
     } catch (err) {
         // it might fail, we don't care
     }
-    await matches.update();
-    setInterval(normalize(async function() {
+    let upd = async function() {
         await matches.update();
         state.change();    
-    }), 45000);
+    }
+    
+    await upd();
+    setInterval(normalize(upd), 45000);
 
-    bot.onText(/\/track[ ]+(.+)/, normalize(async (msg, param) => {
+    bot.onText(/^\/track[ ]+(.+)/, normalize(async (msg, param) => {
 
         const chatId = msg.chat.id;
         const fifa_id = param[1];
@@ -64,7 +66,7 @@ async function start() {
         }
         
     }));
-    bot.onText(/\/matches[ ]*/, normalize(async function (msg) {
+    bot.onText(/^\/matches[ ]*/, normalize(async function (msg) {
         let s = "";
         for (let match of matches.list_matches()) {
             if (match.status == 'future') {
@@ -92,6 +94,7 @@ async function start() {
                 console.error(err);
             }
         }
+        await saveMsgs();
     });
     
     console.log("Bot started");
