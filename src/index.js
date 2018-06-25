@@ -79,12 +79,6 @@ async function start() {
         await bot.sendMessage(msg.chat.id, s, { parse_mode : 'Markdown' });
 
     }));
-    bot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-
-    // send a message to the chat acknowledging receipt of their message
-    bot.sendMessage(chatId, 'Received your message');
-    });
 
     state.addTracker(async function () {
         for (let [fifa_id,msg] of msgs) {
