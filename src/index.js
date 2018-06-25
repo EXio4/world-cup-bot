@@ -55,7 +55,7 @@ async function start() {
         }
         
         let cmsg = await bot.sendMessage(chatId, matches.convert(match), { parse_mode : 'Markdown' });
-        msgs.push([fifa_id, { text : cmsg.text, message_id : cmsg.message_id, chat_id : cmsg.chat_id }]);
+        msgs.push([fifa_id, { text : cmsg.text, message_id : cmsg.message_id, chat_id : cmsg.chat.id }]);
         try {
             await saveMsgs();
         } catch (err) {
