@@ -78,8 +78,12 @@ export class Matches {
     
     async update() {
         console.log("updating...");
-        let matches = await fetch('https://worldcup.sfg.io/matches');
-        this.curr_data = await matches.json();
+        try {
+            let matches = await fetch('https://worldcup.sfg.io/matches');
+            this.curr_data = await matches.json();
+        } catch (err) {
+            console.error(err);
+        }
     }
     
     list_matches() {
