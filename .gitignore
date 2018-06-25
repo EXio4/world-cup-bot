@@ -74,3 +74,4 @@ typings/
 .serverless
 
 config.json
+msgs.json
