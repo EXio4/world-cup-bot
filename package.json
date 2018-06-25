@@ -8,10 +8,16 @@
   "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
+    "country-code-emoji": "^0.0.1",
+    "country-code-info": "^0.0.3",
+    "node-fetch": "^2.1.2",
     "node-telegram-bot-api": "^0.30.0"
   },
   "scripts": {
-    "build": "babel src -d dist"
+    "bot:build": "babel src -d dist",
+    "bot:run": "node dist/index.js",
+    "bot": "yarn bot:build && yarn bot:run"
   }
 }
