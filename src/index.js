@@ -87,7 +87,7 @@ async function start() {
             try {
                 let match = matches.match(fifa_id);
                 let text = matches.convert(match);
-                if (msg.text === text) return; // message already exists, dont update it
+                if (msg.text === text) continue; // message already exists, dont update it
                 msg.text = text;
                 await bot.editMessageText(text, { message_id : msg.message_id, chat_id : msg.chat_id, parse_mode : 'Markdown' });
             } catch (err) {
