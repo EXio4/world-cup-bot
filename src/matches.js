@@ -149,5 +149,12 @@ export class Matches {
         return "???"
     }
     
+    summary(match) {
+        if (match.status == 'future') {
+            return `\`${match.fifa_id}\` ${flag(match.home_team.code)} ${match.home_team.country} - ${match.away_team.country} ${flag(match.away_team.code)} __${match.datetime}__\n`;
+        } else {
+            return `\`${match.fifa_id}\` ${flag(match.home_team.code)} ${match.home_team.country} ${match.home_team.goals} - ${match.away_team.goals} ${match.away_team.country} ${flag(match.away_team.code)}\n`;
+        }
+    }
     
 };

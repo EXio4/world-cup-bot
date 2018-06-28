@@ -56,8 +56,9 @@ async function start() {
             return;
         }
         
-        let cmsg = await bot.sendMessage(chatId, matches.convert(match), { parse_mode : 'Markdown' });
-        msgs.push([fifa_id, { text : cmsg.text, message_id : cmsg.message_id, chat_id : cmsg.chat.id }]);
+        let text = matches.convert(match);
+        let cmsg = await bot.sendMessage(chatId, text, { parse_mode : 'Markdown' });
+        msgs.push([fifa_id, { text : text, message_id : cmsg.message_id, chat_id : cmsg.chat.id }]);
         try {
             await saveMsgs();
         } catch (err) {
@@ -69,11 +70,7 @@ async function start() {
     bot.onText(/^\/matches[ ]*/, normalize(async function (msg) {
         let s = "";
         for (let match of matches.list_matches()) {
-            if (match.status == 'future') {
-                s += `\`${match.fifa_id}\` ${flag(match.home_team.code)} ${match.home_team.country} - ${match.away_team.country} ${flag(match.away_team.code)} __${match.datetime}__\n`;
-            } else {
-                s += `\`${match.fifa_id}\` ${flag(match.home_team.code)} ${match.home_team.country} ${match.home_team.goals} - ${match.away_team.goals} ${match.away_team.country} ${flag(match.away_team.code)}\n`;
-            }
+            s += matches.summary(match) + '\n';
         }
         if (s === "") {
             s = "Loading match info, try again later...";
