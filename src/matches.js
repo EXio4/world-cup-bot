@@ -141,7 +141,10 @@ export class Matches {
             goals(match);
         }
         if (match.status === "completed" || match.status == "in progress" || match.status == "pending_correction") {
-            return `${flag(match.home_team.code)} **${match.home_team.country}** ${match.home_team.goals} - ${match.away_team.goals} **${match.away_team.country}** ${flag(match.away_team.code)} ${match.time}\n${details(match)}`;
+            let home_pen = "", away_pen = "";
+            if (match.home_team.penalties != null) home_pen = "(${match.home_team.penalties})";
+            if (match.away_team.penalties != null) away_pen = "(${match.away_team.penalties})";
+            return `${flag(match.home_team.code)} **${match.home_team.country}** ${match.home_team.goals} ${home_pen} - ${away_pen} ${match.away_team.goals} **${match.away_team.country}** ${flag(match.away_team.code)} ${match.time}\n${details(match)}`;
         } else if (match.status === "future") {
             return `To be played on ${match.datetime}\n${flag(match.home_team.code)} **${match.home_team.country}** - **${match.away_team.country}** ${flag(match.away_team.code)}`;
         }
