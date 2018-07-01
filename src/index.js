@@ -43,6 +43,21 @@ async function start() {
         state.change();    
     }
     
+    state.addTracker(async function () {
+        for (let [fifa_id,msg] of msgs) {
+            try {
+                let match = matches.match(fifa_id);
+                let text = matches.convert(match);
+                if (msg.text === text) continue; // message already exists, dont update it
+                msg.text = text;
+                await bot.editMessageText(text, { message_id : msg.message_id, chat_id : msg.chat_id, parse_mode : 'Markdown' });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        await saveMsgs();
+    });
+    
     await upd();
     setInterval(normalize(upd), 45000);
 
@@ -78,21 +93,6 @@ async function start() {
         await bot.sendMessage(msg.chat.id, s, { parse_mode : 'Markdown' });
 
     }));
-
-    state.addTracker(async function () {
-        for (let [fifa_id,msg] of msgs) {
-            try {
-                let match = matches.match(fifa_id);
-                let text = matches.convert(match);
-                if (msg.text === text) continue; // message already exists, dont update it
-                msg.text = text;
-                await bot.editMessageText(text, { message_id : msg.message_id, chat_id : msg.chat_id, parse_mode : 'Markdown' });
-            } catch (err) {
-                console.error(err);
-            }
-        }
-        await saveMsgs();
-    });
     
     console.log("Bot started");
 
