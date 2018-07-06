@@ -95,7 +95,7 @@ async function start() {
 
     }))
 
-    bot.onText(/^\/historic[ ]+([0-9]*+)[ ]*/, normalize(async function (msg, param) {
+    bot.onText(/^\/historic[ ]+([0-9]+)[ ]*/, normalize(async function (msg, param) {
         let y = wch.year(param[1])
         if (y == null) {
             await bot.sendMessage(msg.chat.id, "We don't have any info on that year :(", { parse_mode : "Markdown" })
