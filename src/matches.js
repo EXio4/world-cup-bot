@@ -3,6 +3,15 @@ import { flag as emoji_flag } from "country-code-emoji"
 import CountryCode from "country-code-info"
 
 export function flag(country_info) {
+    let hack = {
+        "West Germany": "FRG",
+        "England" : "ENG",
+        "South Korea": "KOR",
+        "Soviet Union": "URS"
+    }
+    if (hack[country_info]) {
+        country_info = hack[country_info]
+    }
     let cnt = CountryCode.findCountry({"fifa": country_info})
     if (!cnt) cnt = CountryCode.findCountry({"name": country_info})
     
