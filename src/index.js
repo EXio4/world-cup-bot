@@ -95,7 +95,7 @@ async function start() {
 
     }))
 
-    bot.onText(/^\/historic[ ]+(.+)/, normalize(async function (msg, param) {
+    bot.onText(/^\/historic[ ]+([0-9]*+)[ ]*/, normalize(async function (msg, param) {
         let y = wch.year(param[1])
         if (y == null) {
             await bot.sendMessage(msg.chat.id, "We don't have any info on that year :(", { parse_mode : "Markdown" })
@@ -116,11 +116,11 @@ async function start() {
                 }
             }
             pretty += `Hosted by ${hosts_t}\n`
-            pretty += `The winner was **${y.winner}**, and the runner-up was __${y.runnerUp}__\n`
+            pretty += `The winner was **${y.winner}** ${flag(y.winner)}, and the runner-up was __${y.runnerUp} ${flag(y.runnerUp)} __\n`
             let topScorer = `${y.topGoalScorer.length > 1 ? "The top scorers were: " : "The top scorer was "}\n`
             if (y.topGoalScorer.length > 1) topScorer += "\n"
             for (let sc of y.topGoalScorer) {
-                topScorer += `     **${sc.name}** from **${sc.country}** that scored ${sc.numberOfGoals} goals!\n`
+                topScorer += `     **${sc.name}** from **${sc.country}** ${flag(sc.country)} that scored ${sc.numberOfGoals} goals!\n`
             }
             pretty += topScorer
             await bot.sendMessage(msg.chat.id, pretty, { parse_mode : "Markdown" })
