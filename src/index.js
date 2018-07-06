@@ -101,11 +101,26 @@ async function start() {
             await bot.sendMessage(msg.chat.id, "We don't have any info on that year :(", { parse_mode : "Markdown" })
         } else {
             let pretty = ""
-            pretty += `Hosted by ${y.hostCountry}, the winner was ${y.winner}, and ${y.runnerUp} was runner-up\n`
+            let hosts = y.hostCountry.split(",")
+            let hosts_t = ""
+            if (hosts.length === 1) {
+                hosts_t = `__${hosts[0]}__ ${flag(hosts[0])}` 
+            } else {
+                for (let ix in hosts) {
+                    if (ix > 0 && ix < hosts.length-1) {
+                        hosts_t += ", "
+                    } else if (ix == hosts.length-1) {
+                        hosts_t += "and "
+                    }
+                    hosts_t += `__${hosts[ix]}__ ${flag(hosts[ix])}`
+                }
+            }
+            pretty += `Hosted by ${hosts_t}\n`
+            pretty += `The winner was **${y.winner}**, and the runner-up was __${y.runnerUp}__\n`
             let topScorer = `${y.topGoalScorer.length > 1 ? "The top scorers were: " : "The top scorer was "}\n`
             if (y.topGoalScorer.length > 1) topScorer += "\n"
             for (let sc of y.topGoalScorer) {
-                topScorer += `     ${sc.name} from ${sc.country} that scored ${sc.numberOfGoals}\n`
+                topScorer += `     **${sc.name}** from **${sc.country}** that scored ${sc.numberOfGoals} goals!\n`
             }
             pretty += topScorer
             await bot.sendMessage(msg.chat.id, pretty, { parse_mode : "Markdown" })

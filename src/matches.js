@@ -2,8 +2,10 @@ import fetch from "node-fetch"
 import { flag as emoji_flag } from "country-code-emoji"
 import CountryCode from "country-code-info"
 
-export function flag(fifa_country_code) {
-    let cnt = CountryCode.findCountry({"fifa": fifa_country_code})
+export function flag(country_info) {
+    let cnt = CountryCode.findCountry({"fifa": country_info})
+    if (!cnt) cnt = CountryCode.findCountry({"name": country_info})
+    
     if (!cnt) return "🏴" 
     else return emoji_flag(cnt.a2)
 }
