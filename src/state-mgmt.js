@@ -2,15 +2,15 @@
 
 export class StateTracker {
     constructor() {
-        this.track = [];
+        this.track = []
     }
     
     addTracker(cb) {
-        this.track.push(cb);
+        this.track.push(cb)
     }
     
     change() {
-        this.track.forEach((cb) => cb());
+        this.track.forEach((cb) => cb())
     }
     
 }

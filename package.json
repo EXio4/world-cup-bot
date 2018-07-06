@@ -13,7 +13,8 @@
     "country-code-emoji": "^0.0.1",
     "country-code-info": "^0.0.3",
     "node-fetch": "^2.1.2",
-    "node-telegram-bot-api": "^0.30.0"
+    "node-telegram-bot-api": "^0.30.0",
+    "world-cup-history": "^2.0.11"
   },
   "scripts": {
     "bot:build": "babel src -d dist",
