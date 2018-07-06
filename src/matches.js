@@ -4,17 +4,18 @@ import CountryCode from "country-code-info"
 
 export function flag(country_info) {
     let hack = {
-        "West Germany": "FRG",
+        "West Germany": "Germany",
         "England" : "ENG",
         "South Korea": "KOR",
-        "Soviet Union": "URS"
+        "Soviet Union": "Russia"
     }
     if (hack[country_info]) {
         country_info = hack[country_info]
     }
     let cnt = CountryCode.findCountry({"fifa": country_info})
     if (!cnt) cnt = CountryCode.findCountry({"name": country_info})
-    
+    //if (!cnt && country_info.length == 2) cnt = country_info
+    // ^ hack meant to be used if we have some weird country which isn't easily translated into an emoji, I guess
     if (!cnt) return "🏴" 
     else return emoji_flag(cnt.a2)
 }
