@@ -104,7 +104,7 @@ async function start() {
             let hosts = y.hostCountry.split(",")
             let hosts_t = ""
             if (hosts.length === 1) {
-                hosts_t = `__${hosts[0]}__ ${flag(hosts[0])}` 
+                hosts_t = `_${hosts[0]}_ ${flag(hosts[0])}` 
             } else {
                 for (let ix in hosts) {
                     if (ix > 0 && ix < hosts.length-1) {
@@ -116,14 +116,14 @@ async function start() {
                 }
             }
             pretty += `Hosted by ${hosts_t} on ${param[1]}\n`
-            pretty += `The winner was **${y.winner}** ${flag(y.winner)}, and the runner-up was __${y.runnerUp} ${flag(y.runnerUp)} __\n`
+            pretty += `The winner was *${y.winner}* ${flag(y.winner)}, and the runner-up was _${y.runnerUp}_ ${flag(y.runnerUp)}\n`
             let topScorer = `${y.topGoalScorer.length > 1 ? "The top scorers were: " : "The top scorer was "}\n`
             if (y.topGoalScorer.length > 1) topScorer += "\n"
             for (let sc of y.topGoalScorer) {
-                topScorer += `     **${sc.name}** from **${sc.country}** ${flag(sc.country)} that scored ${sc.numberOfGoals} goals!\n`
+                topScorer += `    *${sc.name}* from *${sc.country}* ${flag(sc.country)} that scored ${sc.numberOfGoals} goals!\n`
             }
             pretty += topScorer
-            pretty += `\nMore info on https://en.wikipedia.org/wiki/${param[1]}_FIFA_World_Cup`
+            pretty += `\nMore info on https://en.wikipedia.org/wiki/${param[1]}\\_FIFA\\_World\\_Cup`
             await bot.sendMessage(msg.chat.id, pretty, { parse_mode : "Markdown" })
         }
     }))
